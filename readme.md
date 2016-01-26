@@ -1,5 +1,7 @@
-FFmpegPlayer-iOS - A movie player for iOS based on FFmpeg.
+FFmpegPlayer-iOS - A movie player for iOS based on FFmpeg
 ==========================================================
+
+Fork from: [kolyvan/kxmovie](https://github.com/kolyvan/kxmovie)
 
 ### Build Instructions
 
@@ -8,6 +10,7 @@ First you need to download, configure and build [FFmpeg](http://ffmpeg.org/index
 	cd kxmovie
 	git submodule update --init	
 	rake
+	pod update
 
 ### Usage
 

@@ -26,5 +26,8 @@ libs/FFmpeg/*
 output/*
 plan
 
+#KxMovieExample/SampleMovies/*
 
-KxMovieExample/SampleMovies/*
+
+## cocoapods
+Pods

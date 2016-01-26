@@ -10,7 +10,8 @@ end
 
 ## build ffmpeg
 
-SDK_VERSION='7.1'
+#SDK_VERSION='7.1'
+SDK_VERSION='9.2'
 
 XCODE_PATH='/Applications/Xcode.app/Contents/Developer/Platforms'
 GCC_PATH='/Applications/XCode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang'
@@ -36,7 +37,7 @@ FFMPEG_BUILD_ARGS_ARMV7 = [
 '--arch=arm',
 '--cpu=cortex-a8',
 '--enable-pic',
-"--extra-cflags='-arch armv7 -miphoneos-version-min=6.0'",
+"--extra-cflags='-arch armv7 -miphoneos-version-min=6.0 -fembed-bitcode'",
 "--extra-ldflags='-arch armv7 -miphoneos-version-min=6.0'",
 "--extra-cflags='-mfpu=neon -mfloat-abi=softfp'",
 '--enable-neon',
@@ -53,7 +54,7 @@ FFMPEG_BUILD_ARGS_ARMV7S = [
 '--arch=arm',
 '--cpu=cortex-a9',
 '--enable-pic',
-"--extra-cflags='-arch armv7s -miphoneos-version-min=6.0'",
+"--extra-cflags='-arch armv7s -miphoneos-version-min=6.0 -fembed-bitcode'",
 "--extra-ldflags='-arch armv7s -miphoneos-version-min=6.0'",
 "--extra-cflags='-mfpu=neon -mfloat-abi=softfp'",
 '--enable-neon',
@@ -70,7 +71,7 @@ FFMPEG_BUILD_ARGS_ARM64 = [
 '--arch=arm64',
 # '--cpu=cortex-a9',
 '--enable-pic',
-"--extra-cflags='-arch arm64 -miphoneos-version-min=6.0'",
+"--extra-cflags='-arch arm64 -miphoneos-version-min=6.0 -fembed-bitcode'",
 "--extra-ldflags='-arch arm64 -miphoneos-version-min=6.0'",
 "--extra-cflags='-mfpu=neon -mfloat-abi=softfp'",
 '--enable-neon',
