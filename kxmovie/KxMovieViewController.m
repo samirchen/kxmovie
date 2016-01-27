@@ -35,9 +35,9 @@ static NSString * formatTimeInterval(CGFloat seconds, BOOL isLeft)
     m = m % 60;
 
     NSMutableString *format = [(isLeft && seconds >= 0.5 ? @"-" : @"") mutableCopy];
-    if (h != 0) [format appendFormat:@"%d:%0.2d", h, m];
-    else        [format appendFormat:@"%d", m];
-    [format appendFormat:@":%0.2d", s];
+    if (h != 0) [format appendFormat:@"%ld:%0.2ld", (long)h, (long)m];
+    else        [format appendFormat:@"%ld", (long)m];
+    [format appendFormat:@":%0.2ld", (long)s];
 
     return format;
 }
@@ -499,8 +499,8 @@ _messageLabel.hidden = YES;
         
         const CGPoint vt = [sender velocityInView:self.view];
         const CGPoint pt = [sender translationInView:self.view];
-        const CGFloat sp = MAX(0.1, log10(fabsf(vt.x)) - 1.0);
-        const CGFloat sc = fabsf(pt.x) * 0.33 * sp;
+        const CGFloat sp = MAX(0.1, log10(fabs(vt.x)) - 1.0);
+        const CGFloat sc = fabs(pt.x) * 0.33 * sp;
         if (sc > 10) {
             
             const CGFloat ff = pt.x > 0 ? 1.0 : -1.0;            
@@ -1221,9 +1221,14 @@ _messageLabel.hidden = YES;
             if (![_subtitlesLabel.text isEqualToString:ms]) {
                 
                 CGSize viewSize = self.view.bounds.size;
-                CGSize size = [ms sizeWithFont:_subtitlesLabel.font
-                             constrainedToSize:CGSizeMake(viewSize.width, viewSize.height * 0.5)
-                                 lineBreakMode:NSLineBreakByTruncatingTail];
+                
+                //CGSize size = [ms sizeWithFont:_subtitlesLabel.font
+                //             constrainedToSize:CGSizeMake(viewSize.width, viewSize.height * 0.5)
+                //                 lineBreakMode:NSLineBreakByTruncatingTail];
+                NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+                CGSize size = [ms boundingRectWithSize:CGSizeMake(viewSize.width, viewSize.height * 0.5) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:_subtitlesLabel.font, NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil].size;
+
                 _subtitlesLabel.text = ms;
                 _subtitlesLabel.frame = CGRectMake(0, viewSize.height - size.height - 10,
                                                    viewSize.width, size.height);
@@ -1307,7 +1312,7 @@ _messageLabel.hidden = YES;
 
 #ifdef DEBUG
     const NSTimeInterval timeSinceStart = [NSDate timeIntervalSinceReferenceDate] - _debugStartTime;
-    NSString *subinfo = _decoder.validSubtitles ? [NSString stringWithFormat: @" %d",_subtitles.count] : @"";
+    NSString *subinfo = _decoder.validSubtitles ? [NSString stringWithFormat: @" %lu",(unsigned long)_subtitles.count] : @"";
     
     NSString *audioStatus;
     
@@ -1323,9 +1328,9 @@ _messageLabel.hidden = YES;
     else if (_debugAudioStatus == 3) audioStatus = @"\n(audio silence)";
     else audioStatus = @"";
 
-    _messageLabel.text = [NSString stringWithFormat:@"%d %d%@ %c - %@ %@ %@\n%@",
-                          _videoFrames.count,
-                          _audioFrames.count,
+    _messageLabel.text = [NSString stringWithFormat:@"%lu %lu%@ %c - %@ %@ %@\n%@",
+                          (unsigned long)_videoFrames.count,
+                          (unsigned long)_audioFrames.count,
                           subinfo,
                           self.decoding ? 'D' : ' ',
                           formatTimeInterval(timeSinceStart, NO),
